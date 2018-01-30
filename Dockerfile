@@ -35,3 +35,10 @@ RUN npm i -g nativescript@^3.4.1 --ignore-scripts --production && \
 # Typescript & Gulp
 RUN npm i -g typescript@2.6.1 gulp-cli --production && \
     npm cache clean --force
+
+# Nativescript user
+RUN useradd -ms /bin/bash nativescript
+USER nativescript
+RUN mkdir -p /home/nativescript/app
+
+WORKDIR /home/nativescript/app
