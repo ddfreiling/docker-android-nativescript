@@ -35,3 +35,18 @@ RUN npm i -g nativescript@^3.4.1 --ignore-scripts --production && \
 # Typescript & Gulp
 RUN npm i -g typescript@2.6.1 gulp-cli --production && \
     npm cache clean --force
+
+# Jenkins setup
+RUN useradd -ms /bin/bash jenkins
+
+RUN mkdir -p /app && \
+    chown jenkins:jenkins /opt/android-sdk /app
+
+USER jenkins
+
+ENV ANDROID_HOME /opt/android-sdk
+ENV PATH $PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+
+#VOLUME ["/app"]
+
+WORKDIR /app
