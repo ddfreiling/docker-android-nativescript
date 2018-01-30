@@ -1,6 +1,6 @@
 # Fat image for android + node: FROM beevelop/android-nodejs
 FROM thyrlian/android-sdk:latest
-MAINTAINER Daniel Freiling <ddfreiling@gmail.com>
+LABEL maintainer="Daniel Freiling <ddfreiling@gmail.com>"
 
 ARG NODE_MAJOR_VERSION="8"
 ARG ANDROID_TOOLS_VERSION="27.0.3"
@@ -10,7 +10,7 @@ ARG ANDROID_PLATFORM_API="25"
 RUN apt-get update && \
     apt-get -y install apt-utils apt-transport-https unzip curl usbutils --no-install-recommends && \
     rm -r /var/lib/apt/lists/*
-    
+
 # Update Android SDK
 RUN mkdir -p ~/.android && touch ~/.android/repositories.cfg && \
     echo 'Update platform-tools...' && sdkmanager "platform-tools" && \
@@ -33,5 +33,5 @@ RUN npm i -g nativescript@^3.4.1 --ignore-scripts --production && \
     tns usage-reporting disable
 
 # Typescript & Gulp
-RUN npm i -g typescript gulp-cli --production && \
+RUN npm i -g typescript@2.6.1 gulp-cli --production && \
     npm cache clean --force
