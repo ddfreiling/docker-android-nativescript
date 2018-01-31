@@ -43,7 +43,8 @@ WORKDIR ${HOME}
 
 # NVM + Node
 ENV NVM_DIR="${HOME}/.nvm"
-ENV NODE_ENV="production"
+# FIX: gulp-cli/gulp does not work as expected in production mode
+ENV NODE_ENV="development"
 
 RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash -
 
