@@ -51,10 +51,10 @@ ENV NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules"
 ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
 
 # NativeScript
-RUN npm i -g nativescript@^3.4.1 --ignore-scripts --production && \
+RUN npm i -g nativescript@~3.4.1 --ignore-scripts && \
     tns error-reporting disable && \
     tns usage-reporting disable
 
 # Typescript & Gulp
-RUN npm i -g typescript@2.6.1 gulp-cli --production && \
+RUN npm i -g typescript@~2.5.3 gulp-cli@~1.4.0 && \
     npm cache clean --force
