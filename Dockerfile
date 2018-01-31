@@ -10,6 +10,11 @@ ARG USER="jenkins"
 # Fix source usage
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
+# Dumb-init
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64.deb
+RUN dpkg -i dumb-init_*.deb
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
 # Utilities
 # RUN apt-get update && \
 #     apt-get -y install apt-transport-https unzip curl usbutils --no-install-recommends && \
@@ -36,11 +41,11 @@ USER ${USER}
 
 WORKDIR ${HOME}
 
-# NVM + Node + NPM
+# NVM + Node
 ENV NVM_DIR="${HOME}/.nvm"
 ENV NODE_ENV="production"
 
-RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash - 
+RUN wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash -
 
 RUN source $NVM_DIR/nvm.sh && \
     nvm install $NODE_VERSION && \
