@@ -58,8 +58,8 @@ RUN source $NVM_DIR/nvm.sh && \
     npm i -g typescript@~2.5.3 gulp-cli@~1.4.0 && \
     npm cache clean --force
 
-# ENV NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules"
-# ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
+ENV NODE_PATH="$NVM_DIR/v$NODE_VERSION/lib/node_modules"
+ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH"
 
 # NativeScript
 # RUN npm i -g nativescript@~3.4.1 --ignore-scripts && \
