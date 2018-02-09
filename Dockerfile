@@ -7,16 +7,16 @@ ARG ANDROID_BUILD_TOOLS="27.0.3"
 ARG ANDROID_PLATFORM_API="25"
 ARG NODE_USER="jenkins"
 
-ENV USER_HOME="/home/${NODE_USER}"
-ENV ANDROID_HOME="/opt/android-sdk"
-ENV NVM_DIR="${USER_HOME}/.nvm"
-ENV PATH="$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
+ENV USER_HOME="/home/${NODE_USER}" \
+    ANDROID_HOME="/opt/android-sdk" \
+    NVM_DIR="/home/${NODE_USER}/.nvm" \
+    NVM_BIN="/home/${NODE_USER}/.nvm/versions/${NODE_VERSION}/bin"
 
+ENV PATH="$PATH:{ANDROID_HOME}/tools:{ANDROID_HOME}/platform-tools:${NVM_BIN}"
 
 # Dumb-init
 RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64.deb && \
     dpkg -i dumb-init_*.deb
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 
 # Utilities
 # RUN apt-get update && \
@@ -43,12 +43,11 @@ USER ${NODE_USER}
 # NVM + Node + typescript, gulp-cli, nativescript
 RUN wget -nv -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.7/install.sh | bash - && \
     \. $NVM_DIR/nvm.sh && \
-    nvm install $NODE_VERSION && \
-    nvm alias default $NODE_VERSION && \
-    nvm use default && \
     npm i -g typescript@~2.5.3 && \
     npm i -g gulp-cli@~1.4.0 && \
     npm i -g nativescript@~3.4.1 --ignore-scripts && \
     tns error-reporting disable && \
     tns usage-reporting disable && \
     npm cache clean --force
+
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
