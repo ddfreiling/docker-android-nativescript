@@ -10,13 +10,18 @@ ARG NODE_USER="jenkins"
 ENV USER_HOME="/home/${NODE_USER}" \
     ANDROID_HOME="/opt/android-sdk" \
     NVM_DIR="/home/${NODE_USER}/.nvm" \
-    NVM_BIN="/home/${NODE_USER}/.nvm/versions/${NODE_VERSION}/bin"
-
-ENV PATH="$PATH:{ANDROID_HOME}/tools:{ANDROID_HOME}/platform-tools:${NVM_BIN}"
+    NVM_BIN="/home/${NODE_USER}/.nvm/versions/node/v${NODE_VERSION}/bin" \
+    CHROME_BIN="/usr/bin/google-chrome-stable"
 
 # Dumb-init
-RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64.deb && \
+RUN wget -q https://github.com/Yelp/dumb-init/releases/download/v1.2.1/dumb-init_1.2.1_amd64.deb && \
     dpkg -i dumb-init_*.deb
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Google Chrome (used for automated tests in headless mode)
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+    apt-get update && apt-get install -y google-chrome-stable && rm -r /var/lib/apt/lists/* && google-chrome-stable --version
 
 # Utilities
 # RUN apt-get update && \
@@ -50,4 +55,4 @@ RUN wget -nv -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.7/insta
     tns usage-reporting disable && \
     npm cache clean --force
 
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+ENV PATH="$PATH:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${NVM_BIN}"
